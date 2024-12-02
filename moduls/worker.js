@@ -11,12 +11,12 @@ export class Worker extends Person {
     }
 
     get userRate() {
-        console.log(`Ставка: ${this.#rate}`);
+        return `Ставка: ${this.#rate}`;
     }
 
     set userRate(rate) {
         if (rate < 1000) {
-            console.log(`Ставка менее ${this.#rate} не может быть`);
+            console.log(`Ставка менее 1000 не может быть`);
             return this.#rate;
         }
         this.#rate = rate;
@@ -57,16 +57,17 @@ export class Worker extends Person {
 
     addDays(day) {
         const daysInMonth = this.daysInMonth();
+
         if (day < 0 || day > daysInMonth) {
             console.log(`Количество дней: ${day} не соответствует текущему месяцу, либо меньше 0`)
             return this.#days;
         }
         this.#days += day;
+
         if (this.#days > daysInMonth) {
             console.log(`Общее количество дней: ${this.#days} указано больше, чем в текущем месяце, устанавливаю количество дней равное количеству дней в месяце: ${daysInMonth}`);
             return this.#days = daysInMonth;
         }
-
     }
 
     getSalary() {
@@ -79,26 +80,52 @@ export class Worker extends Person {
     }
 
     static whoWorkedMore(item) {
-        item.forEach(personItem => {
-            let persons = new Worker(personItem.name, personItem.lastName, personItem.birthday, personItem.position);
-            // persons.addDays()
-            // persons.addDays(33)
-            console.log(persons)
-            console.log(persons.#days)
-            console.log(persons.getFullName())
+        let maxDays = 0;
+        const maxDaysArray = [];
+
+        // Тут делаю сортировку, чтобы сначала шли пользователи с большим количеством отработанных дней,
+        // т.к. так будет проще будет их перебирать и добавлять максимальное количество дней в переменную maxDays
+        let usersWorkingDays = item.sort((a, b) => {
+            return b.#days - a.#days
         });
-        // console.log(`Больше всех отработал ${person.getFullName}. Количество рабочих дней - ${person.#days}`)
+
+        // Тут прохожусь по массиву и пользователей с большим количеством отработанных дней добавляю в массив maxDaysArray
+        usersWorkingDays.forEach(person => {
+            if (person.#days >= maxDays) {
+                maxDays = person.#days
+                maxDaysArray.push(person)
+            }
+        });
+
+        // Вывожу в консоль этих пользователей
+        maxDaysArray.forEach(user => {
+            console.log(`Больше всех отработал ${user.getFullName()}. Количество рабочих дней - ${user.#days}`)
+        });
     }
 
-    static whoIsYounger(person) {
-        person.forEach(personItem => {
-            let persons = new Worker(personItem.name, personItem.lastName, personItem.birthday, personItem.position);
+    static whoIsYounger(item) {
+        let maxAge = Infinity;
+        const minAgesArray = [];
 
+        // Тут делаю сортировку, чтобы сначала шли пользователи с меньшим возрастом,
+        // т.к. так будет проще будет их перебирать и добавлять минимальный возраст в переменную maxAge
+        let usersAge = item.sort((a, b) => {
+            return parseInt(a.getAge()) - parseInt(b.getAge())
+        });
+
+        // Тут прохожусь по массиву и самых молодых пользователей добавляю в массив minAgesArray
+        usersAge.forEach(person => {
+            if (parseInt(person.getAge()) <= maxAge) {
+                maxAge = parseInt(person.getAge())
+                minAgesArray.push(person)
+            }
+        });
+
+        // Вывожу в консоль этих пользователей
+        minAgesArray.forEach(user => {
+            console.log(`${user.getFullName()} ${user.getAge()}`)
         });
     }
 }
 
-// const test = new Worker()
-// test.getSalary()
-// console.log(test.getSalary())
 
