@@ -69,8 +69,10 @@ usersArray[3].addDays(10);
 usersArray[4].addDays(10);
 usersArray[5].addDays(10);
 usersArray[6].addDays(30);
-usersArray[6].addDays(-1);
+usersArray[6].addDays(-18);
 usersArray[7].addDays(10);
+
+console.log(usersArray)
 
 usersArray[0].userRate = 1400;
 usersArray[4].userRate = 900;

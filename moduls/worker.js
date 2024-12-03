@@ -58,7 +58,7 @@ export class Worker extends Person {
     addDays(day) {
         const daysInMonth = this.daysInMonth();
 
-        if (day < 0 || day > daysInMonth) {
+        if (day > daysInMonth) {
             console.log(`Количество дней: ${day} не соответствует текущему месяцу, либо меньше 0`)
             return this.#days;
         }
@@ -68,7 +68,13 @@ export class Worker extends Person {
             console.log(`Общее количество дней: ${this.#days} указано больше, чем в текущем месяце, устанавливаю количество дней равное количеству дней в месяце: ${daysInMonth}`);
             return this.#days = daysInMonth;
         }
+
+        if (this.#days < 0) {
+            console.log('Количество отработанных дней не может быть отрицательным')
+            return this.#days = 0
+        }
     }
+
 
     getSalary() {
         const currentMonth = new Date().getMonth() + 1;
